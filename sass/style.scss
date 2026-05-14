@@ -1,11 +1,9 @@
 // cols
 @use "./libs/cols";
 
-
-
 // Libs
 /* @import './libs/fancybox'; */
-@use './libs/swiper';
+@use "./libs/swiper";
 @use "./libs/fancybox";
 
 // base
@@ -17,7 +15,6 @@
 @use "./base/rating";
 @use "./base/pagination";
 @use "./base/breadcrumbs";
-
 
 //components
 
@@ -44,32 +41,24 @@
 
 @use "./section/footer";
 
-
 //woo
 /* cataglpg */
 @use "./section/categories";
 @use "./section/wishlist";
 @use "./section/fillter";
 
-
 /* product */
 @use "./section/product";
 @use "./section/product-comment";
 
-
-
 /* acaunt */
 @use "./section/acaunt";
 
-
-
-
 .description .dco-image-attachment img {
-    width: 80px !important;
-    height: 80px !important;
+  width: 80px !important;
+  height: 80px !important;
 }
 
 
-/* .stars{
-    display: none;
-} */
+
+

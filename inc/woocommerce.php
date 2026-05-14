@@ -23,8 +23,11 @@ if (class_exists('WooCommerce')) {
     require get_template_directory() . '/inc/woocommers/product/product.php';
     require get_template_directory() . '/inc/woocommers/product/product-form.php';
     require get_template_directory() . '/inc/woocommers/product/product-comment.php';
-    
+
 
     /* rating */
     require get_template_directory() . '/inc/woocommers/rating.php';
+
+    /* cart */
+
 }

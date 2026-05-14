@@ -66,13 +66,13 @@
 
 
 							<div class="header__content">
-								<div class="header__account account header__box">
-									<a href="my-account/">
-										<svg class="user__svg">
-											<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/svg/login.svg#login"></use>
-										</svg>
-									</a>
-								</div>
+
+								<a href="my-account/" class="header__account account header__box">
+									<svg class="user__svg">
+										<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/svg/login.svg#login"></use>
+									</svg>
+
+								</a>
 
 								<a href="/wishlist" class="header__wishlist wishlist header__box">
 
@@ -83,12 +83,12 @@
 
 								</a>
 
-								<div class="header__cart cart header__box">
+								<div class="header__cart cart header__box cart-user">
 									<svg class="cart__svg">
 
 										<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/svg/basket.svg#basket"></use>
 									</svg>
-									<span class="cart__number">0</span>
+									<span class="cart__number cart__quantity-product"> <?php echo WC()->cart->get_cart_contents_count(); ?></span>
 								</div>
 
 							</div>
@@ -249,11 +249,11 @@
 								</a>
 							</div>
 
-							<div class="header__cart cart header__box">
+							<div class="header__cart cart header__box cart-user">
 								<svg class="cart__svg">
 									<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/svg/basket.svg#basket"></use>
 								</svg>
-								<span class="cart__number">0</span>
+								<span class="cart__number cart__quantity-product"> <?php echo WC()->cart->get_cart_contents_count(); ?></span>
 							</div>
 						</div>
 					</div>

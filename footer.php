@@ -168,7 +168,8 @@
 
 <?php wp_footer(); ?>
 
+<?php cart(); ?>
+
 </body>
 
 </html>
-

@@ -78,10 +78,17 @@ function project_scripts()
 		true
 	);
 
+	/* appi */
 	wp_localize_script('script', 'wpApiSettings', [
 		'root' => esc_url(rest_url()),
-		/*передаем авторизированного юзера в жс */
 		'nonce' => wp_create_nonce('wp_rest'),
+	]);
+
+
+	/* admin-ajax */
+	wp_localize_script('script', 'my_ajax_obj', [
+		'ajax_url' => admin_url('admin-ajax.php'),
+		'nonce' => wp_create_nonce('nonceToken')
 	]);
 }
 add_action('wp_enqueue_scripts', 'project_scripts');
