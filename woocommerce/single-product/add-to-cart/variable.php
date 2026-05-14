@@ -90,7 +90,7 @@ do_action('woocommerce_before_add_to_cart_form'); ?>
 
 					<!-- pa_light-requirements -->
 
-					<?php if ($attribute_name === 'pa_light-requirements') : ?>
+					<?php if ($attribute_name === 'pa_lighting') : ?>
 						<div class="product__tabs product__light">
 							<?php foreach ($options as $option) : ?>
 								<span class="product__tabs-item product__light-item"

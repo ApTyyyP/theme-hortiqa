@@ -29,5 +29,9 @@ if (class_exists('WooCommerce')) {
     require get_template_directory() . '/inc/woocommers/rating.php';
 
     /* cart */
+    require get_template_directory() . '/inc/woocommers/cart/cart-backend.php';
+    require get_template_directory() . '/section/cart.php';
+
+   
 
 }

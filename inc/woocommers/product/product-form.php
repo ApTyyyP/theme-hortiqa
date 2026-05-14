@@ -93,13 +93,15 @@ function couter_variation()
         <!-- COUNTER -->
         <div class="counter">
             <button type="button" class="counter__btn minus">-</button>
-
-            <input type="number"
+            <input
+                type="text"
                 class="counter__input qty"
                 name="quantity"
                 value="1"
-                min="1"
-                step="1">
+                maxlength="1"
+                inputmode="numeric">
+
+
 
             <button type="button" class="counter__btn plus">+</button>
         </div>
