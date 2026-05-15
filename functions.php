@@ -90,6 +90,12 @@ function project_scripts()
 		'ajax_url' => admin_url('admin-ajax.php'),
 		'nonce' => wp_create_nonce('nonceToken')
 	]);
+
+	/* валюта сайта */
+	wp_localize_script('script', 'wcData', [
+		'currencySymbol' => get_woocommerce_currency_symbol(),
+		'currencyCode'   => get_woocommerce_currency(),
+	]);
 }
 add_action('wp_enqueue_scripts', 'project_scripts');
 

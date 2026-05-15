@@ -105,12 +105,11 @@
 
     object-fit: cover;
     border-radius: 8px;
-
-    margin-right: 10px;
   }
 
   .cart__wrapper {
     flex: 1;
+    margin: 0px 8px;
   }
 
   .cart__sub-title {
@@ -202,11 +201,11 @@
   &__variation {
     background: var(--gren);
     border-radius: 20px;
-    padding: 6px 8px;
+    padding: 5px 5px;
     display: inline-block;
     span {
       color: white;
-      font-size: 12px;
+      font-size: 11px;
     }
   }
 }

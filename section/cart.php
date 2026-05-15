@@ -94,7 +94,7 @@ function cart()
                             Загальна ціна:
                             <span class="cart__price-currency"><?= wc_price(WC()->cart->get_cart_contents_total()); ?></span>
                         </div>
-                        <a class="cart__link" href="/checkout/">Оформити замовлення</a>
+                        <a class="cart__link" href="<?php echo wc_get_checkout_url(); ?>">Оформити замовлення</a>
                     </div>
 
                 <?php else : ?>

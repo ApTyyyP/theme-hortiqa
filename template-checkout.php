@@ -18,6 +18,7 @@ $items = $cart->get_cart();  ?>
 
             <div class="wrapper">
                 <div class="сheckout__wrapper-box">
+
                     <form class="form сheckout__form" action="/payment/">
                         <h2 class="сheckout__title title">Оформлення замовлення</h2>
                         <div class="form__sub-title">Контактні дані</div>
@@ -166,8 +167,11 @@ $items = $cart->get_cart();  ?>
                                     <div class="сheckout__total">
                                         <span>Загальна сума замовлення</span>
                                         <div class="сheckout__content-box">
+                                            <span class="checkout__price-currency"> <?php echo number_format(WC()->cart->get_cart_contents_total(), 2, '.', ''); ?> </span>
+                                            <span class="checkout__currency"> <?php echo get_woocommerce_currency_symbol(); ?> </span>
 
-                                            <span class="сheckout__total-price cart__price-currency"> <?php echo WC()->cart->get_cart_total(); ?></span>
+
+
 
                                         </div>
 
@@ -218,12 +222,7 @@ $items = $cart->get_cart();  ?>
                                                 <div class="basket__content-inner">
                                                     <div class="basket__quantity"><span>Кількість :</span> <?= esc_html($cart_item['quantity']); ?></div>
                                                     <div class="basket__prace__wrapper">
-                                                        <div class="basket__prace"> <?php
-                                                                                    $quantity = $cart_item['quantity'];
-                                                                                    $price = $product->get_sale_price() ? $product->get_sale_price() : $product->get_price();
-                                                                                    $total = $quantity * $price;
-                                                                                    echo wc_price($total);
-                                                                                    ?></div>
+                                                        <div class="basket__prace "> <?php echo WC()->cart->get_cart_total(); ?></div>
 
                                                     </div>
 
@@ -238,7 +237,14 @@ $items = $cart->get_cart();  ?>
                         </ul>
                         <div class="basket__price">
                             <p>Попередній підсумок:</p>
-                            <span class="cart__price-currency"> <?php echo WC()->cart->get_cart_total(); ?></span>
+                            <div class="basket__price-box">
+
+                                <span class="checkout__price-currency"> <?php echo number_format(WC()->cart->get_cart_contents_total(), 2, '.', ''); ?> </span>
+                                <span class="checkout__currency"> <?php echo get_woocommerce_currency_symbol(); ?> </span>
+                            </div>
+
+
+
                         </div>
 
 
