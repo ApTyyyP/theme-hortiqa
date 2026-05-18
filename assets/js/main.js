@@ -2007,7 +2007,7 @@ document.addEventListener("DOMContentLoaded", () => {
       btn.classList.add("disable");
     }
     if (price > 0) {
-      btn.classList.remove("disable");
+      btn.classList.remove  ("disable");
     }
 
   };

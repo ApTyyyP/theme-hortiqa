@@ -63,10 +63,10 @@
 }
 
 /* =========================
-   CHECKOUT PAGE
+   summary PAGE
 ========================= */
 
-.сheckout {
+.summary {
   padding: 80px 0;
   background-size: cover;
   background-position: center;
@@ -79,18 +79,21 @@
     align-items: flex-start;
   }
 }
+form {
+  padding: 0 !important;
+}
 
 /* =========================
    FORM
 ========================= */
 
-.сheckout__form {
+.summary__form {
   background: #ffffff;
   border-radius: 30px;
   padding: 40px;
   box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
 
-  .сheckout__title {
+  .summary__title {
     font-size: 38px;
     font-weight: 700;
     margin-bottom: 35px;
@@ -118,29 +121,29 @@
     }
   }
 
-  .сheckout__items {
+  .summary__items {
     display: flex;
     flex-direction: column;
     gap: 22px;
     margin-bottom: 40px;
   }
 
-  .сheckout__item-wrapper {
+  .summary__item-wrapper {
     display: flex;
     flex-direction: column;
     width: 50%;
   }
-  .сheckout__item-coment {
+  .summary__item-coment {
     width: 100%;
   }
-  .checkout__price-currency {
+  .summary__price-currency {
     font-size: 28px !important;
     font-weight: 700;
     color: #111;
     display: inline-block !important;
   }
 
-  .checkout__currency {
+  .summary__currency {
     font-size: 20px !important;
     color: #111;
     font-weight: 700;
@@ -165,7 +168,7 @@
   }
 
   .form__input,
-  .сheckout__item-promo {
+  .summary__item-promo {
     width: 100%;
     height: 60px;
     border-radius: 18px;
@@ -193,13 +196,13 @@
     letter-spacing: 2px;
   }
 
-  .сheckout__item-boxs {
+  .summary__item-boxs {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 16px;
   }
 
-  .сheckout__item-box {
+  .summary__item-box {
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -207,8 +210,8 @@
 
   /* RADIO */
 
-  .сheckout__del,
-  .сheckout__payment .сheckout__item {
+  .summary__del,
+  .summary__payment .summary__item {
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
@@ -279,13 +282,13 @@
 
   /* PROMO */
 
-  .сheckout__wrapper {
+  .summary__wrapper {
     display: flex;
     gap: 14px;
     margin-bottom: 30px;
   }
 
-  .сheckout__btn {
+  .summary__btn {
     min-width: 170px;
     border: none;
     border-radius: 18px;
@@ -304,16 +307,16 @@
 
   /* TOTAL */
 
-  .сheckout__inner {
+  .summary__inner {
     background: #fafafa;
     border-radius: 24px;
     padding: 28px;
     border: 1px solid #ececec;
   }
 
-  .сheckout__total,
-  .сheckout__total-discount,
-  .сheckout__total-delivery {
+  .summary__total,
+  .summary__total-discount,
+  .summary__total-delivery {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -325,35 +328,35 @@
     }
   }
 
-  .сheckout__content-box {
+  .summary__content-box {
     display: flex;
     align-items: end;
     gap: 5px;
   }
 
-  .сheckout__total-price {
+  .summary__total-price {
     font-size: 30px;
     font-weight: 700;
     color: #111;
   }
 
-  .сheckout__total-sum {
+  .summary__total-sum {
     font-size: 24px;
     font-weight: 700;
     color: var(--gren);
   }
 
-  .сheckout__discount,
-  .сheckout__delivery {
+  .summary__discount,
+  .summary__delivery {
     font-weight: 600;
     color: #111;
   }
 
-  .сheckout__inner-box {
+  .summary__inner-box {
     margin-top: 30px;
   }
 
-  .сheckout__paymentbtn {
+  .summary__paymentbtn {
     width: 100%;
     height: 64px;
     border: none;
@@ -517,14 +520,14 @@
       color: #333;
     }
 
-    .checkout__price-currency {
+    .summary__price-currency {
       font-size: 28px;
       font-weight: 700;
       color: #111;
       display: inline-block;
     }
 
-    .checkout__currency {
+    .summary__currency {
       font-size: 20px;
       color: #111;
       font-weight: 700;
@@ -631,7 +634,7 @@
 ========================= */
 
 @media (max-width: 1150px) {
-  .сheckout {
+  .summary {
     &__wrapper-box {
       grid-template-columns: 1fr;
     }
@@ -643,30 +646,30 @@
 }
 
 @media (max-width: 768px) {
-  .сheckout {
+  .summary {
     padding: 40px 0;
   }
 
-  .сheckout__form,
+  .summary__form,
   .basket {
     padding: 20px;
     border-radius: 22px;
   }
 
-  .сheckout__form {
-    .сheckout__title {
+  .summary__form {
+    .summary__title {
       font-size: 28px;
     }
 
-    .сheckout__item-boxs {
+    .summary__item-boxs {
       grid-template-columns: 1fr;
     }
 
-    .сheckout__wrapper {
+    .summary__wrapper {
       flex-direction: column;
     }
 
-    .сheckout__btn {
+    .summary__btn {
       width: 100%;
       height: 58px;
     }
@@ -675,12 +678,12 @@
       width: 100%;
     }
 
-    .сheckout__del,
-    .сheckout__payment .сheckout__item {
+    .summary__del,
+    .summary__payment .summary__item {
       flex-direction: column;
     }
 
-    .сheckout__total {
+    .summary__total {
       flex-direction: column;
       align-items: flex-start;
       gap: 10px;
@@ -689,11 +692,29 @@
 }
 
 @media (max-width: 600px) {
-  .сheckout__item.form__box {
+  .summary__item.form__box {
     flex-direction: column;
     width: 100%;
   }
-  .сheckout__item-wrapper {
+  .summary__item-wrapper {
     width: 100% !important;
   }
+}
+
+
+
+/* Базовые woo */
+/* коментарий к заказу */
+.woocommerce-additional-fields__field-wrapper {
+  display: none;
+}
+
+/* детали заказа */
+.shop_table {
+  display: none;
+}
+
+/* купон */
+.woocommerce-form-coupon-toggle {
+  display: none;
 }

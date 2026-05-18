@@ -1,8 +1,5 @@
 <?php
 
-
-
-
 if (class_exists('WooCommerce')) {
 
     /* !!!!woocommerce castom!!!  */
@@ -28,10 +25,11 @@ if (class_exists('WooCommerce')) {
     /* rating */
     require get_template_directory() . '/inc/woocommers/rating.php';
 
-    /* cart */
+    /* mini cart */
     require get_template_directory() . '/inc/woocommers/cart/cart-backend.php';
     require get_template_directory() . '/section/cart.php';
 
-   
 
+    /* checkout */
+    require get_template_directory() . '/inc/woocommers/checkout/checkout.php';
 }
