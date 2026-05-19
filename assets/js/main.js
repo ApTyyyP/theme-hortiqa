@@ -2007,16 +2007,36 @@ document.addEventListener("DOMContentLoaded", () => {
       btn.classList.add("disable");
     }
     if (price > 0) {
-      btn.classList.remove  ("disable");
+      btn.classList.remove("disable");
     }
 
   };
 
 
+  /*  liqpay */
+  function updateTexts() {
+
+    const liqpayLabel = document.querySelector('li.payment_method_liqpay label');
+    const liqpayBox = document.querySelector('li.payment_method_liqpay .payment_box p');
+
+    if (liqpayLabel) {
+      liqpayLabel.innerHTML = 'LiqPay — оплата карткою Visa / Mastercard';
+    }
 
 
+  }
 
+  updateTexts();
 
+  function fixCOD() {
+    const cod = document.querySelector('li.payment_method_cod .payment_box p');
+
+    if (cod) {
+      cod.innerHTML = 'Оплата готівкою або карткою при отриманні замовлення.';
+    }
+  }
+
+  fixCOD();
 
 });
 

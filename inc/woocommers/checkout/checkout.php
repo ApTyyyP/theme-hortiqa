@@ -3,30 +3,37 @@
 
 
 
-/* Хук для удаляния ипутов личных данных и доставки    и можно задать порядок */
+/* Хук для удаляния ипутов личных данных и доставки    и можно задать порядок импутов  */
 add_filter('woocommerce_checkout_fields', 'custom_remove_checkout_fields');
 
 function custom_remove_checkout_fields($fields)
 {
-
+    // BILLING remove лишнего
     unset($fields['billing']['billing_company']);
     unset($fields['billing']['billing_country']);
     unset($fields['billing']['billing_state']);
     unset($fields['billing']['billing_postcode']);
+    unset($fields['billing']['billing_address_1']);
     unset($fields['billing']['billing_address_2']);
+    unset($fields['billing']['billing_city']);
 
+    // PHONE обязательно
+    $fields['billing']['billing_phone']['required'] = true;
+    $fields['billing']['billing_phone']['label'] = 'Телефон';
 
+    // SHIPPING полностью отключаем
     unset($fields['shipping']);
 
     return $fields;
 }
 
+add_filter('woocommerce_checkout_fields', 'custom_remove_checkout_fields');
 
 
 
 
-/* хук для порядка вывода  импутов, Личные данные доставка оплата и добавления стилей */
 
+/* хук для порядка вывода  импутов*/
 
 remove_action(
     'woocommerce_checkout_billing',
@@ -40,33 +47,37 @@ add_action('woocommerce_checkout_billing', function () {
     $checkout = WC()->checkout();
     $fields = $checkout->get_checkout_fields();
 
-    echo '<div class="my-billing-wrapper">';
+    echo '<div class="checkout__wrapper">';
+    echo '<h2 class="checkout__title title">Оформлення замовлення</h2>';
+    echo '<ul class="checkout__items ">';
 
-    echo '<h2 class="title">Личные данные </h2>';
-
-    // 👤 BILLING
+    //  личные данные 
     foreach ($fields['billing'] as $key => $field) {
 
+        echo '<li class="checkout__item">';
         // добавляем свой класс к input
-        $field['input_class'][] = 'my-input';
-        $field['class'][] = 'my-field-wrapper';
+        $field['input_class'][] = 'checkout__input';
+        $field['class'][] = 'checkout__box';
 
         woocommerce_form_field(
             $key,
             $field,
             $checkout->get_value($key)
         );
+        echo '</li>';
     }
+    echo '<div class="checkout__comment">Доставка </div>';
 
 
     // ⚙️ ACCOUNT (если включено)
     if (!empty($fields['account'])) {
-        echo '<h2 class="title">Доствка  </h2>';
-        foreach ($fields['account'] as $key => $field) {
+        echo '<h3 class="title">Доствка</h3>';
 
+        foreach ($fields['account'] as $key => $field) {
+            echo '<li class="checkout__item">';
             // добавляем свой класс к input
-            $field['input_class'][] = 'my-input';
-            $field['class'][] = 'my-field-wrapper';
+            $field['input_class'][] = 'checkout__input';
+            $field['class'][] = 'checkout__box';
 
 
             woocommerce_form_field(
@@ -75,31 +86,84 @@ add_action('woocommerce_checkout_billing', function () {
                 $checkout->get_value($key)
             );
         }
+        echo '</li>';
     }
 
-    // 🧾 ORDER COMMENTS
-    if (!empty($fields['order']['order_comments'])) {
-        echo '<h2 class="title">Коментарий</h2>';
 
 
-        // добавляем свой класс к input
-        $field['input_class'][] = 'my-input';
-        $field['class'][] = 'my-field-wrapper';
+    /* --------------------не нужна доствка базовая вокомерса убрать значит -------------- */
 
 
-        woocommerce_form_field(
-            'order_comments',
-            $fields['order']['order_comments'],
-            $checkout->get_value('order_comments')
-        );
-    }
+    /* Доствка  отключил стандартную потключил вокомерс */
+    /*     if (!empty($fields['shipping'])) {
 
+        echo '<h2 class="title">Доставка</h2>';
+
+        foreach ($fields['shipping'] as $key => $field) {
+
+            echo '<li class="checkout__item">';
+
+            $field['input_class'][] = 'checkout__input';
+            $field['class'][] = 'checkout__box';
+
+            woocommerce_form_field(
+                $key,
+                $field,
+                $checkout->get_value($key)
+            );
+
+            echo '</li>';
+        }
+    } */
+
+    echo '</ul>';
     echo '</div>';
 }, 10);
 
 
 
 
-add_action('woocommerce_checkout_payment', function () {
-    echo '<div class="my-payment">Мой блок оплаты</div>';
-}, 10);
+
+/* хук для коментеря к форме */
+add_action('woocommerce_after_order_notes', function () {
+
+    echo '<div class="after-np-comment">';
+
+    $checkout = WC()->checkout();
+    $field = $checkout->get_checkout_fields()['order']['order_comments'];
+
+    $field['input_class'][] = 'checkout__input';
+    $field['class'][] = 'checkout__box';
+
+    woocommerce_form_field(
+        'order_comments',
+        $field,
+        $checkout->get_value('order_comments')
+    );
+
+    echo '</div>';
+}, 20);
+
+
+
+/* убрать  Дополнительный адрис */
+add_filter('woocommerce_cart_needs_shipping_address', '__return_false');
+
+
+
+
+
+
+
+
+
+/* Блок опалата */
+
+remove_action('woocommerce_checkout_order_review', 'woocommerce_checkout_payment', 20);
+
+add_action('woocommerce_checkout_order_review', function () {
+
+    echo '<h3 class="checkout__comment">Оберіть зручний для вас спосіб оплати</h3>';
+
+    woocommerce_checkout_payment();
+}, 20);

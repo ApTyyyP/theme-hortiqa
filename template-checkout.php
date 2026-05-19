@@ -23,75 +23,76 @@ $items = $cart->get_cart();  ?>
                     <?php echo do_shortcode('[woocommerce_checkout]'); ?>
 
 
-                    
 
-                    <!-- basket product -->
-                    <div class="basket">
-                        <div class="basket__title">Ваше замовлення:</div>
-                        <ul class="basket__items ">
-                            <?php foreach ($items as $cart_item_key => $cart_item) :
-                                $product = $cart_item['data'];
-                            ?>
-                                <li class="basket__item cart__item" data-product-id="<?= esc_attr($product->get_id()); ?>">
-                                    <div class="basket__box">
-                                        <a href="<?= esc_url($product->get_permalink()); ?>">
-                                            <img
-                                                class="basket__image"
-                                                src="<?= wp_get_attachment_image_url($product->get_image_id(), 'thumbnail'); ?>"
-                                                alt="<?= esc_attr($product->get_name()); ?>" />
-                                        </a>
-                                        <div class="basket__wrapper">
-                                            <div class="basket__sub-title"><?= esc_html($product->get_name()); ?></div>
+                    <?php if (! is_order_received_page()) : ?>
 
-                                            <!-- VARIATIONS -->
-                                            <?php if (!empty($cart_item['variation'])) : ?>
-                                                <div class="mini-cart__variations">
-                                                    <?php foreach ($cart_item['variation'] as $key => $value) : ?>
-                                                        <div class="mini-cart__variation">
-                                                            <span><?= esc_html(str_replace('attribute_pa_', '', $key)); ?>:</span>
-                                                            <span><?= esc_html($value); ?></span>
+                        <!-- basket product -->
+                        <div class="basket">
+                            <div class="basket__title">Ваше замовлення:</div>
+                            <ul class="basket__items ">
+                                <?php foreach ($items as $cart_item_key => $cart_item) :
+                                    $product = $cart_item['data'];
+                                ?>
+                                    <li class="basket__item cart__item" data-product-id="<?= esc_attr($product->get_id()); ?>">
+                                        <div class="basket__box">
+                                            <a href="<?= esc_url($product->get_permalink()); ?>">
+                                                <img
+                                                    class="basket__image"
+                                                    src="<?= wp_get_attachment_image_url($product->get_image_id(), 'thumbnail'); ?>"
+                                                    alt="<?= esc_attr($product->get_name()); ?>" />
+                                            </a>
+                                            <div class="basket__wrapper">
+                                                <div class="basket__sub-title"><?= esc_html($product->get_name()); ?></div>
+
+                                                <!-- VARIATIONS -->
+                                                <?php if (!empty($cart_item['variation'])) : ?>
+                                                    <div class="mini-cart__variations">
+                                                        <?php foreach ($cart_item['variation'] as $key => $value) : ?>
+                                                            <div class="mini-cart__variation">
+                                                                <span><?= esc_html(str_replace('attribute_pa_', '', $key)); ?>:</span>
+                                                                <span><?= esc_html($value); ?></span>
+                                                            </div>
+                                                        <?php endforeach; ?>
+                                                    </div>
+                                                <?php endif; ?>
+
+
+
+                                                <div class="basket__wrapper-inner">
+                                                    <!-- Сумма за товар без валюты -->
+                                                    <div class="basket__content-inner">
+                                                        <div class="basket__quantity"><span>Кількість :</span> <?= esc_html($cart_item['quantity']); ?></div>
+                                                        <div class="basket__prace__wrapper">
+                                                            <div class="basket__prace "> <?php echo WC()->cart->get_cart_total(); ?></div>
+
                                                         </div>
-                                                    <?php endforeach; ?>
-                                                </div>
-                                            <?php endif; ?>
-
-
-
-                                            <div class="basket__wrapper-inner">
-                                                <!-- Сумма за товар без валюты -->
-                                                <div class="basket__content-inner">
-                                                    <div class="basket__quantity"><span>Кількість :</span> <?= esc_html($cart_item['quantity']); ?></div>
-                                                    <div class="basket__prace__wrapper">
-                                                        <div class="basket__prace "> <?php echo WC()->cart->get_cart_total(); ?></div>
 
                                                     </div>
 
                                                 </div>
-
                                             </div>
-                                        </div>
 
 
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
-                        <div class="basket__price">
-                            <p>Попередній підсумок:</p>
-                            <div class="basket__price-box">
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                            <div class="basket__price">
+                                <p>Попередній підсумок:</p>
+                                <div class="basket__price-box">
 
-                                <span class="summary__price-currency"> <?php echo number_format(WC()->cart->get_cart_contents_total(), 2, '.', ''); ?> </span>
-                                <span class="summary__currency"> <?php echo get_woocommerce_currency_symbol(); ?> </span>
+                                    <span class="summary__price-currency"> <?php echo number_format(WC()->cart->get_cart_contents_total(), 2, '.', ''); ?> </span>
+                                    <span class="summary__currency"> <?php echo get_woocommerce_currency_symbol(); ?> </span>
+                                </div>
+
+
+
                             </div>
 
 
 
                         </div>
 
-
-
-                    </div>
-
-
+                    <?php endif; ?>
                 </div>
             </div>
         </section>
