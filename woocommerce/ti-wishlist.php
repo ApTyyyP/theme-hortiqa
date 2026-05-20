@@ -10,7 +10,7 @@
  */
 
 if (! defined('ABSPATH')) {
-	exit; // Exit if accessed directly.
+    exit; // Exit if accessed directly.
 }
 wp_enqueue_script('tinvwl');
 ?>
@@ -20,10 +20,10 @@ wp_enqueue_script('tinvwl');
 
     <?php $form_url = tinv_url_wishlist($wishlist['share_key'], $wl_paged, true); ?>
     <form action="<?php echo esc_url($form_url); ?>" method="post" autocomplete="off"
-          data-tinvwl_paged="<?php echo $wl_paged; ?>"
-          data-tinvwl_per_page="<?php echo $wl_per_page; ?>"
-          data-tinvwl_sharekey="<?php echo $wishlist['share_key']; ?>"
-          class="tinvwl-wishlist-form">
+        data-tinvwl_paged="<?php echo $wl_paged; ?>"
+        data-tinvwl_per_page="<?php echo $wl_per_page; ?>"
+        data-tinvwl_sharekey="<?php echo $wishlist['share_key']; ?>"
+        class="tinvwl-wishlist-form">
 
         <?php do_action('tinvwl_before_wishlist_table', $wishlist); ?>
 
@@ -32,112 +32,143 @@ wp_enqueue_script('tinvwl');
 
             <?php
             global $product, $post;
+
             $_product_tmp = $product;
-            $_post_tmp = $post;
+            $_post_tmp = $post; ?>
 
-            foreach ($products as $wl_product) {
-                if (empty($wl_product['data'])) continue;
 
-                $product = apply_filters('tinvwl_wishlist_item', $wl_product['data']);
-                $post = get_post($product->get_id());
-                unset($wl_product['data']);
 
-                if ($wl_product['quantity'] > 0 && apply_filters('tinvwl_wishlist_item_visible', true, $wl_product, $product)) {
-                    $product_url = apply_filters('tinvwl_wishlist_item_url', $product->get_permalink(), $wl_product, $product);
-                    do_action('tinvwl_wishlist_row_before', $wl_product, $product);
-            ?>
-                    <div class="col-3 <?php echo esc_attr(apply_filters('tinvwl_wishlist_item_class', $wl_product, $product)); ?>">
-                        <div class="wishlist_item wishlist-card">
-                            <!-- Checkbox -->
-                            <?php if (!empty($wishlist_table['colm_checkbox'])): ?>
-                                <div class="wishlist-col wishlist-checkbox col-auto">
-                                    <?php
-                                    echo apply_filters('tinvwl_wishlist_item_cb', sprintf(
-                                        '<input type="checkbox" name="wishlist_pr[]" class="input-checkbox" value="%d" title="%s">',
-                                        esc_attr($wl_product['ID']),
-                                        __('Select for bulk action', 'ti-woocommerce-wishlist')
-                                    ), $wl_product, $product);
-                                    ?>
+            <ul class="categories__items row">
+                <? foreach ($products as $wl_product) {
+
+                    if (empty($wl_product['data'])) continue;
+
+                    $product = apply_filters('tinvwl_wishlist_item', $wl_product['data']);
+                    $post = get_post($product->get_id());
+
+
+                    $product = apply_filters('tinvwl_wishlist_item', $wl_product['data']);
+
+
+
+                    $post = get_post($product->get_id());
+                    unset($wl_product['data']);
+
+                    if ($wl_product['quantity'] > 0 && apply_filters('tinvwl_wishlist_item_visible', true, $wl_product, $product)) {
+
+
+
+                        $rating = (float) $product->get_average_rating();
+                        $rating_int = floor($rating);
+
+                        $product_url = apply_filters(
+                            'tinvwl_wishlist_item_url',
+                            $product->get_permalink(),
+                            $wl_product,
+                            $product
+                        );
+
+                        do_action('tinvwl_wishlist_row_before', $wl_product, $product);
+                ?>
+
+
+
+                        <li class="categories__item product type-product col-3">
+
+                            <div class="categories__item-box">
+
+                                <!-- REMOVE (wishlist) -->
+                                <div class="categories__wishlist product-item__link-heart">
+                                    <button type="submit"
+                                        name="tinvwl-remove"
+                                        value="<?php echo esc_attr($wl_product['ID']); ?>">
+                                        <i class="ftinvwl ftinvwl-times"></i>
+                                    </button>
                                 </div>
-                            <?php endif; ?>
 
-                            <!-- Remove -->
-                            <div class="wishlist-col wishlist-remove col-auto">
-                                <button type="submit" name="tinvwl-remove" value="<?php echo esc_attr($wl_product['ID']); ?>"
-                                        title="<?php _e('Remove', 'ti-woocommerce-wishlist'); ?>">
-                                    <i class="ftinvwl ftinvwl-times"></i>
-                                </button>
+                                <!-- IMAGE -->
+                                <a href="<?php echo esc_url($product_url); ?>" class="categories__cart">
+
+                                    <span class="onsale">АКЦІЯ</span>
+
+                                    <?php echo $product->get_image('woocommerce_thumbnail'); ?>
+
+                                </a>
+
+                                <!-- INNER -->
+                                <div class="categories__item-inner">
+
+                                    <!-- NAME -->
+                                    <a href="<?php echo esc_url($product_url); ?>" class="categories__cart">
+
+                                        <div class="categories__contnet">
+                                            <div class="review-content">Отзывов :</div>
+                                            <div class="review-count">
+                                                <?php echo $product->get_review_count(); ?>
+                                            </div>
+                                        </div>
+
+                                        <h2 class="categories__name">
+                                            <?php echo $product->get_name(); ?>
+                                        </h2>
+
+
+                                        <?php if (!empty($rating) && $rating > 0) : ?>
+
+                                            <div class="rating" data-rate-total="<?php echo esc_attr($rating); ?>">
+
+                                                <?php for ($i = 5; $i >= 1; $i--) : ?>
+
+                                                    <svg
+                                                        class="rating__star <?php echo ($i <= $rating_int) ? 'active' : ''; ?>"
+                                                        data-rate="<?php echo $i; ?>"
+                                                        viewBox="0 0 26 25">
+
+                                                        <path d="M11.5204 1.9421C11.986 0.508953 14.0135 0.508955 14.4792 1.94211L16.2677 7.44656C16.476 8.08748 17.0732 8.52142 17.7471 8.52142H23.5349C25.0418 8.52142 25.6683 10.4497 24.4492 11.3354L19.7668 14.7374C19.2216 15.1335 18.9935 15.8356 19.2017 16.4765L20.9902 21.981C21.4559 23.4142 19.8156 24.6059 18.5965 23.7202L13.9141 20.3182C13.3689 19.9221 12.6307 19.9221 12.0855 20.3182L7.40308 23.7202C6.18397 24.6059 4.54367 23.4141 5.00933 21.981L6.79784 16.4765C7.00608 15.8356 6.77795 15.1335 6.23275 14.7374L1.55038 11.3354C0.331269 10.4497 0.95781 8.52142 2.46471 8.52142H8.25243C8.92634 8.52142 9.52361 8.08748 9.73186 7.44656L11.5204 1.9421Z"></path>
+
+                                                    </svg>
+
+                                                <?php endfor; ?>
+
+                                            </div>
+
+                                        <?php endif; ?>
+
+                                        <div class="categories__desc">
+                                            <?php echo wc_get_product_category_list($product->get_id()); ?>
+                                        </div>
+
+                                    </a>
+
+                                    <!-- PRICE + BUTTON -->
+                                    <div class="categories__wrapper-content">
+
+                                        <a href="<?php echo esc_url($product_url); ?>" class="categories__cart categories__cart-price">
+                                            <?php echo $product->get_price_html(); ?>
+                                        </a>
+
+                                        <a href="<?php echo esc_url($product_url); ?>" class="categories__link btn-green">
+                                            <span>Вибрати</span>
+                                        </a>
+
+                                    </div>
+
+                                </div>
+
                             </div>
 
-                            <!-- Thumbnail -->
-                            <div class="wishlist-col wishlist-thumbnail col-auto">
-                                <?php
-                                $thumbnail = apply_filters('tinvwl_wishlist_item_thumbnail', $product->get_image(), $wl_product, $product);
-                                if (!$product->is_visible()) {
-                                    echo $thumbnail;
-                                } else {
-                                    printf('<a href="%s">%s</a>', esc_url($product_url), $thumbnail);
-                                }
-                                ?>
-                            </div>
+                        </li>
 
-                            <!-- Product Name & Meta -->
-                            <div class="wishlist-col wishlist-name col">
-                                <?php
-                                if (!$product->is_visible()) {
-                                    echo apply_filters('tinvwl_wishlist_item_name', $product->get_name(), $wl_product, $product);
-                                } else {
-                                    echo apply_filters('tinvwl_wishlist_item_name', sprintf('<a href="%s">%s</a>', esc_url($product_url), $product->get_name()), $wl_product, $product);
-                                }
-                                echo apply_filters('tinvwl_wishlist_item_meta_data', tinv_wishlist_get_item_data($product, $wl_product), $wl_product, $product);
-                                ?>
-                            </div>
 
-                            <!-- Price -->
-                            <?php if (!empty($wishlist_table_row['colm_price'])): ?>
-                                <div class="wishlist-col wishlist-price col-auto">
-                                    <?php echo apply_filters('tinvwl_wishlist_item_price', $product->get_price_html(), $wl_product, $product); ?>
-                                </div>
-                            <?php endif; ?>
 
-                            <!-- Stock -->
-                            <?php if (!empty($wishlist_table_row['colm_stock'])): ?>
-                                <div class="wishlist-col wishlist-stock col-auto">
-                                    <?php
-                                    $availability = (array)$product->get_availability();
-                                    $availability['availability'] = $availability['availability'] ?? '';
-                                    $availability['class'] = $availability['class'] ?? '';
-                                    $availability_html = empty($availability['availability'])
-                                        ? '<p class="stock ' . esc_attr($availability['class']) . '"><i class="ftinvwl ftinvwl-check"></i> In stock</p>'
-                                        : '<p class="stock ' . esc_attr($availability['class']) . '">' . esc_html($availability['availability']) . '</p>';
-                                    echo apply_filters('tinvwl_wishlist_item_status', $availability_html, $availability['availability'], $wl_product, $product);
-                                    ?>
-                                </div>
-                            <?php endif; ?>
+                <?php
+                        do_action('tinvwl_wishlist_row_after', $wl_product, $product);
+                    }
+                } ?>
+            </ul>
 
-                            <!-- Add to Cart -->
-                            <?php if (!empty($wishlist_table_row['add_to_cart'])): ?>
-                                <div class="wishlist-col wishlist-action col-auto">
-                                    <?php
-                                    if (apply_filters('tinvwl_wishlist_item_action_add_to_cart', $wishlist_table_row['add_to_cart'], $wl_product, $product)) {
-                                        ?>
-                                        <button class="button alt" name="tinvwl-add-to-cart" value="<?php echo esc_attr($wl_product['ID']); ?>"
-                                                title="<?php echo esc_html(apply_filters('tinvwl_wishlist_item_add_to_cart', $wishlist_table_row['text_add_to_cart'], $wl_product, $product)); ?>">
-                                            <i class="ftinvwl ftinvwl-shopping-cart"></i>
-                                            <span><?php echo wp_kses_post(apply_filters('tinvwl_wishlist_item_add_to_cart', $wishlist_table_row['text_add_to_cart'], $wl_product, $product)); ?></span>
-                                        </button>
-                                    <?php } ?>
-                                </div>
-                            <?php endif; ?>
 
-                        </div>
-                    </div>
-            <?php
-                    do_action('tinvwl_wishlist_row_after', $wl_product, $product);
-                } // End if visible
-            } // End foreach
-
-            $product = $_product_tmp;
+            <? $product = $_product_tmp;
             $post = $_post_tmp;
             ?>
             <?php do_action('tinvwl_wishlist_contents_after'); ?>
@@ -154,5 +185,3 @@ wp_enqueue_script('tinvwl');
         <?php do_action('tinvwl_pagenation_wishlist', $wishlist); ?>
     </div>
 </div>
-
-

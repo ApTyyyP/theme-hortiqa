@@ -4,7 +4,10 @@
 
 <? get_header();
 
-
+if (WC()->cart->is_empty()) {
+    wp_redirect(wc_get_page_permalink('shop'));
+    exit;
+}
 
 $cart = WC()->cart;
 $items = $cart->get_cart();  ?>
@@ -77,7 +80,7 @@ $items = $cart->get_cart();  ?>
                                 <?php endforeach; ?>
                             </ul>
                             <div class="basket__price">
-                                <p>Попередній підсумок:</p>
+                                <p>Сума до сплати</p>
                                 <div class="basket__price-box">
 
                                     <span class="summary__price-currency"> <?php echo number_format(WC()->cart->get_cart_contents_total(), 2, '.', ''); ?> </span>

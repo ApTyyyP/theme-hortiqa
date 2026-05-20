@@ -2013,6 +2013,47 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
 
+
+  /*  ридерект каталог если корзине нет товара */
+
+  const summaryProductRidirect = () => {
+
+    const basket = document.querySelector('.summary');
+
+    if (!basket) return;
+
+    const checkBasket = () => {
+      const items = document.querySelectorAll('.basket__item');
+
+      if (items.length === 0) {
+        window.location.href = 'сategory/';
+      }
+    };
+
+    checkBasket();
+
+    const observer = new MutationObserver(() => {
+      checkBasket();
+    });
+
+    observer.observe(basket, {
+      childList: true,
+      subtree: true
+    });
+  };
+
+  summaryProductRidirect();
+
+
+
+
+
+
+
+
+
+
+
   /*  liqpay */
   function updateTexts() {
 
@@ -2020,9 +2061,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const liqpayBox = document.querySelector('li.payment_method_liqpay .payment_box p');
 
     if (liqpayLabel) {
-      liqpayLabel.innerHTML = 'LiqPay — оплата карткою Visa / Mastercard';
-    }
+      const textNode = Array.from(liqpayLabel.childNodes)
+        .find(node => node.nodeType === Node.TEXT_NODE);
 
+      if (textNode) {
+        textNode.textContent = 'LiqPay — оплата карткою';
+      } else {
+        liqpayLabel.insertAdjacentText('beforeend', ' LiqPay — оплата карткою');
+      }
+    }
 
   }
 
@@ -2037,6 +2084,14 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   fixCOD();
+
+
+
+
+
+
+
+
 
 });
 

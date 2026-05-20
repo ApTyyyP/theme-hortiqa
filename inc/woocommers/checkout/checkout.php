@@ -3,12 +3,12 @@
 
 
 
-/* Хук для удаляния ипутов личных данных и доставки    и можно задать порядок импутов  */
+/* Хук удаляет из формы импуты,  делать обезательные импуты или нет, для заполения и можно управлять порядком вывода импутов  */
 add_filter('woocommerce_checkout_fields', 'custom_remove_checkout_fields');
 
 function custom_remove_checkout_fields($fields)
 {
-    // BILLING remove лишнего
+    // Улаление из личных данных импуты
     unset($fields['billing']['billing_company']);
     unset($fields['billing']['billing_country']);
     unset($fields['billing']['billing_state']);
@@ -17,11 +17,11 @@ function custom_remove_checkout_fields($fields)
     unset($fields['billing']['billing_address_2']);
     unset($fields['billing']['billing_city']);
 
-    // PHONE обязательно
+    // PHONE обезательное к заполнению
     $fields['billing']['billing_phone']['required'] = true;
     $fields['billing']['billing_phone']['label'] = 'Телефон';
 
-    // SHIPPING полностью отключаем
+    // Доставку , дефотную отключил, тому что потключил новую почту.
     unset($fields['shipping']);
 
     return $fields;
@@ -33,7 +33,7 @@ add_filter('woocommerce_checkout_fields', 'custom_remove_checkout_fields');
 
 
 
-/* хук для порядка вывода  импутов*/
+/* хук для порядка вывода в форме блоков импуты , 1 личные данные 2 доставка 3 оплата*/
 
 remove_action(
     'woocommerce_checkout_billing',
@@ -51,6 +51,7 @@ add_action('woocommerce_checkout_billing', function () {
     echo '<h2 class="checkout__title title">Оформлення замовлення</h2>';
     echo '<ul class="checkout__items ">';
 
+
     //  личные данные 
     foreach ($fields['billing'] as $key => $field) {
 
@@ -66,7 +67,7 @@ add_action('woocommerce_checkout_billing', function () {
         );
         echo '</li>';
     }
-    echo '<div class="checkout__comment">Доставка </div>';
+
 
 
     // ⚙️ ACCOUNT (если включено)
@@ -117,6 +118,7 @@ add_action('woocommerce_checkout_billing', function () {
     } */
 
     echo '</ul>';
+    echo '<h3 class="checkout__comment">Доставка нова пошта</h3>';
     echo '</div>';
 }, 10);
 
@@ -124,7 +126,7 @@ add_action('woocommerce_checkout_billing', function () {
 
 
 
-/* хук для коментеря к форме */
+/* хук Коментарь из формы ,  Если нужно его можно поместить выше в хук*/
 add_action('woocommerce_after_order_notes', function () {
 
     echo '<div class="after-np-comment">';
