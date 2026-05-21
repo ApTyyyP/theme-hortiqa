@@ -23,7 +23,7 @@ function custom_remove_checkout_fields($fields)
     $fields['billing']['billing_phone']['label'] = 'Телефон';
 
     /* Доставку , дефотную отключил, тому что потключил новую почту. */
-   /*  unset($fields['shipping']); */
+    unset($fields['shipping']);
 
     return $fields;
 }
@@ -169,8 +169,3 @@ add_action('woocommerce_checkout_order_review', function () {
 
     woocommerce_checkout_payment();
 }, 20);
-
-
-
-
-

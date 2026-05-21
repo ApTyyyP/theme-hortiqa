@@ -47,12 +47,12 @@
   }
 
   /* nova poshta */
-/*  .mrkv_ua_shipping_checkout_fields{
+ .mrkv_ua_shipping_checkout_fields{
   display: block !important;
  }
  #mrkv_ua_shipping_nova-poshta_poshtamat-shipping-info{
   display: none !important; 
- } */
+ } 
   #mrkv_ua_shipping_nova-poshta-shipping-info {
     display: grid;
     grid-template-columns: repeat(1, 1fr);

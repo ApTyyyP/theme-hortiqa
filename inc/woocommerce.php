@@ -12,24 +12,24 @@ if (class_exists('WooCommerce')) {
 
 
     /* catalog */
-    require get_template_directory() . '/inc/woocommers/account.php';
-    require get_template_directory() . '/inc/woocommers/catalog/catalog.php';
-    require get_template_directory() . '/inc/woocommers/catalog/catalog-filter.php';
+    require get_template_directory() . '/inc/woo/account.php';
+    require get_template_directory() . '/inc/woo/catalog/catalog.php';
+    require get_template_directory() . '/inc/woo/catalog/catalog-filter.php';
 
     /* product */
-    require get_template_directory() . '/inc/woocommers/product/product.php';
-    require get_template_directory() . '/inc/woocommers/product/product-form.php';
-    require get_template_directory() . '/inc/woocommers/product/product-comment.php';
+    require get_template_directory() . '/inc/woo/product/product.php';
+    require get_template_directory() . '/inc/woo/product/product-form.php';
+    require get_template_directory() . '/inc/woo/product/product-comment.php';
 
 
     /* rating */
-    require get_template_directory() . '/inc/woocommers/rating.php';
+    require get_template_directory() . '/inc/woo/rating.php';
 
     /* mini cart */
-    require get_template_directory() . '/inc/woocommers/cart/cart-backend.php';
+    require get_template_directory() . '/inc/woo/cart/cart-backend.php';
     require get_template_directory() . '/section/cart.php';
 
 
     /* checkout */
-    require get_template_directory() . '/inc/woocommers/checkout/checkout.php';
+    require get_template_directory() . '/inc/woo/checkout/checkout.php';
 }
