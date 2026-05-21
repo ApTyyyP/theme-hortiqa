@@ -73,7 +73,7 @@ wp_enqueue_script('tinvwl');
 
 
 
-                        <li class="categories__item product type-product col-3">
+                        <li class="categories__item product type-product  col-sm-6 col-lg-4 col-xl-3">
 
                             <div class="categories__item-box">
 
@@ -113,6 +113,15 @@ wp_enqueue_script('tinvwl');
                                         </h2>
 
 
+
+
+                                        <div class="categories__desc">
+                                            <?php echo wc_get_product_category_list($product->get_id()); ?>
+                                        </div>
+
+
+
+
                                         <?php if (!empty($rating) && $rating > 0) : ?>
 
                                             <div class="rating" data-rate-total="<?php echo esc_attr($rating); ?>">
@@ -133,12 +142,8 @@ wp_enqueue_script('tinvwl');
                                             </div>
 
                                         <?php endif; ?>
-
-                                        <div class="categories__desc">
-                                            <?php echo wc_get_product_category_list($product->get_id()); ?>
-                                        </div>
-
                                     </a>
+
 
                                     <!-- PRICE + BUTTON -->
                                     <div class="categories__wrapper-content">

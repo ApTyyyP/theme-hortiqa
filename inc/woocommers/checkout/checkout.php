@@ -4,6 +4,7 @@
 
 
 /* Хук удаляет из формы импуты,  делать обезательные импуты или нет, для заполения и можно управлять порядком вывода импутов  */
+
 add_filter('woocommerce_checkout_fields', 'custom_remove_checkout_fields');
 
 function custom_remove_checkout_fields($fields)
@@ -21,13 +22,12 @@ function custom_remove_checkout_fields($fields)
     $fields['billing']['billing_phone']['required'] = true;
     $fields['billing']['billing_phone']['label'] = 'Телефон';
 
-    // Доставку , дефотную отключил, тому что потключил новую почту.
-    unset($fields['shipping']);
+    /* Доставку , дефотную отключил, тому что потключил новую почту. */
+   /*  unset($fields['shipping']); */
 
     return $fields;
 }
 
-add_filter('woocommerce_checkout_fields', 'custom_remove_checkout_fields');
 
 
 
@@ -169,3 +169,8 @@ add_action('woocommerce_checkout_order_review', function () {
 
     woocommerce_checkout_payment();
 }, 20);
+
+
+
+
+

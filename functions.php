@@ -131,9 +131,22 @@ function register_acf_blocks()
 
 
 
+setcookie('site_guard', '1', 0, '/');
 
-/* if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Дебаг(аякс) categoryId
-    var_dump($_POST['categoryId']); 
-    exit; // останавливаем, чтобы сразу увидеть
-} */
+add_action('init', function () {
+
+	// если куки нет → считаем сессию сломанной
+	if (!isset($_COOKIE['site_guard'])) {
+
+		// чистим куки (только для текущего домена/пути)
+		foreach ($_COOKIE as $name => $value) {
+			setcookie($name, '', 0, '/');
+			unset($_COOKIE[$name]);
+		}
+
+		wp_logout();
+	}
+
+	// всегда восстанавливаем маячок
+	setcookie('site_guard', '1', 0, '/');
+});
