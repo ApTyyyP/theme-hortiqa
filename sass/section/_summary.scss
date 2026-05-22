@@ -23,6 +23,7 @@
   padding: 30px;
   background: #fff;
   border-radius: 20px;
+
   &__title {
     padding: 20px 0;
   }
@@ -31,6 +32,7 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 0px 10px;
   }
+
   &__item p {
     width: 100% !important;
   }
@@ -38,8 +40,47 @@
     padding-left: 20px;
     font-size: 18px;
   }
+  .select2-selection {
+    border: none;
+  }
 
-  input {
+  .select2-selection__arrow b {
+    left: -10px !important;
+    display: none !important;
+  }
+
+  .select2-selection__rendered {
+    position: relative;
+    padding-left: 22px; /* место под иконку */
+  }
+
+  .select2-selection__rendered {
+    position: relative;
+    padding-right: 25px;
+  }
+
+  .select2-selection__rendered::before {
+    content: "";
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
+
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 129 129'%3E%3Cpath fill='%23000' d='m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+
+    transition: transform 0.2s ease;
+  }
+
+  .select2-container--open .select2-selection__rendered::before {
+    transform: translateY(-50%) rotate(180deg);
+  }
+
+  input,
+  .select2-selection__rendered {
     border-radius: 20px !important;
     padding: 10px !important;
     padding-left: 20px !important;
@@ -47,55 +88,30 @@
   }
 
   /* nova poshta */
- .mrkv_ua_shipping_checkout_fields{
-  display: block !important;
- }
- #mrkv_ua_shipping_nova-poshta_poshtamat-shipping-info{
-  display: none !important; 
- } 
-  #mrkv_ua_shipping_nova-poshta-shipping-info {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    gap: 10px;
-    position: relative; 
-    z-index: 1;
-
-    .form-row {
+  .woocommerce-additional-fields {
+    h3 {
       display: none;
     }
-    .form-row.validate-required {
-      display: block;
-    }
-    #mrkv_ua_shipping_nova-poshta_warehouse_number_field {
-      display: none;
-    }
-    #mrkv_ua_shipping_nova-poshta_warehouse_ref_field {
-      display: none;
-    }
-
-    .selection .select2-selection {
-      border: none;
-    }
-
-    .select2-selection__arrow {
-      top: 5px;
-      right: 10px;
-    }
-
-    .select2-selection__rendered {
-      border: 1px solid var(--gren);
-      padding-left: 20px;
+    .zen-ui-select__value {
       border-radius: 20px;
-      height: 38px;
+      padding: 10px;
+      padding-left: 20px;
+      border: 1px solid var(--gren);
+    }
+    .zen-ui-select__value-text {
+      padding-left: 20px;
+    }
 
-      display: flex;
-      align-items: center;
+    .zen-ui-select__value > svg {
+      position: absolute;
+      right: 20px;
+      width: 13px;
+      height: 12px;
+      fill: var(--gren);
+      stroke: var(--gren);
     }
   }
 
-  .after-np-comment {
-    padding: 20px 0;
-  }
   textarea {
     margin-top: 10px !important;
     padding: 20px !important;
@@ -405,6 +421,10 @@
     &__wrapper-box {
       grid-template-columns: 1fr;
     }
+  }
+
+  .zen-ui-select__value-text {
+    font-size: 1.3rem;
   }
 }
 

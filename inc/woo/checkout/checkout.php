@@ -11,7 +11,13 @@ function custom_remove_checkout_fields($fields)
 {
     // Улаление из личных данных импуты
     unset($fields['billing']['billing_company']);
-    unset($fields['billing']['billing_country']);
+
+    /* Это поле обезательное его нельзя удалять  наче будет ошибка
+      Пожалуйста, введите адрес для продолжения
+
+    /*unset($fields['billing']['billing_country']);*/
+
+
     unset($fields['billing']['billing_state']);
     unset($fields['billing']['billing_postcode']);
     unset($fields['billing']['billing_address_1']);
@@ -22,8 +28,6 @@ function custom_remove_checkout_fields($fields)
     $fields['billing']['billing_phone']['required'] = true;
     $fields['billing']['billing_phone']['label'] = 'Телефон';
 
-    /* Доставку , дефотную отключил, тому что потключил новую почту. */
-    unset($fields['shipping']);
 
     return $fields;
 }
@@ -169,3 +173,31 @@ add_action('woocommerce_checkout_order_review', function () {
 
     woocommerce_checkout_payment();
 }, 20);
+
+
+
+
+
+
+
+
+
+
+
+add_filter('woocommerce_checkout_fields', function ($fields) {
+
+    if (!empty($fields['shipping'])) {
+        foreach ($fields['shipping'] as $key => $field) {
+            $fields['shipping'][$key]['required'] = false;
+        }
+    }
+
+    return $fields;
+}, 9999);
+
+
+add_action('woocommerce_checkout_process', function () {
+
+    // убираем стандартную проверку shipping адреса
+    remove_all_filters('woocommerce_after_checkout_validation');
+});
