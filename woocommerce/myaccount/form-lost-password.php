@@ -23,15 +23,15 @@ do_action('woocommerce_before_lost_password_form');
 
 
 <section class="recovery">
-	<div class="container">
-		<div class="col wrapper">
+	<div class="wrapper">
+		<div class="col recovery__inner">
 			<form method="post" class="woocommerce-ResetPassword lost_reset_password">
 
 				<p><?php echo apply_filters('woocommerce_lost_password_message', esc_html__('Lost your password? Please enter your username or email address. You will receive a link to create a new password via email.', 'woocommerce')); ?></p><?php // @codingStandardsIgnoreLine 
 																																																													?>
 
 				<p class="woocommerce-form-row woocommerce-form-row--first form-row form-row-first">
-				
+
 					<input class="woocommerce-Input woocommerce-Input--text input-text" placeholder="Username or email " type="text" name="user_login" id="user_login" autocomplete="username" required aria-required="true" />
 				</p>
 

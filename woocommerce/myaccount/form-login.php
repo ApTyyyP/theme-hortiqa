@@ -72,6 +72,8 @@ $registration_enabled = 'yes' === get_option('woocommerce_enable_myaccount_regis
 					</div>
 				<?php endif; ?>
 
+				
+
 			</div>
 
 			<!-- REGISTER -->
@@ -125,7 +127,6 @@ $registration_enabled = 'yes' === get_option('woocommerce_enable_myaccount_regis
 						<p class="checkbox">
 							<label>
 								<input type="checkbox" name="receive" value="1">
-								I want to receive updates about products and promotions
 							</label>
 						</p>
 

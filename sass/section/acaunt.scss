@@ -20,7 +20,13 @@
     padding: 0 !important;
     width: 340px;
   }
-
+  .checkbox {
+    display: flex;
+    input {
+      width: 20px !important;
+      height: 20px !important;
+    }
+  }
   button {
     border-radius: 38px !important;
     background: var(--lightgreen) !important;
@@ -241,5 +247,118 @@
 @media (max-width: 480px) {
   .auth-block {
     padding: 28px 18px;
+  }
+}
+
+.recovery {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  form {
+    width: 340px;
+  }
+  input {
+    width: 100% !important;
+    padding: 14px 14px !important;
+    border: 1px solid #ddd !important;
+    border-radius: 10px !important;
+    font-size: 14px !important;
+    transition: 0.25s ease !important;
+    background: #fff !important;
+  }
+  .woocommerce-form-row {
+    width: 100% !important;
+  }
+  .recovery .wrapper {
+    width: 100%;
+    width: 370px;
+  }
+  button {
+    border-radius: 38px !important;
+    background: var(--lightgreen) !important;
+    display: flex !important;
+    padding: 16px 22px !important;
+    cursor: pointer;
+    color: var(--body) !important;
+    align-items: center !important;
+    transition: all 0.5s !important;
+    font-size: 16px !important;
+    justify-content: center !important;
+
+    &:hover {
+      background: var(--gren) !important;
+      color: var(--white) !important;
+      transition: all 0.5s !important;
+    }
+  }
+
+  &__inner {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+/* CARD */
+.woocommerce-ResetPassword {
+  background: #fff;
+  padding: 28px;
+  border-radius: 18px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* TEXT */
+.woocommerce-ResetPassword p {
+  color: #666;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+/* INPUT */
+.woocommerce-Input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid #e6e8f0;
+  outline: none;
+  transition: 0.2s;
+  font-size: 14px;
+}
+
+.woocommerce-Input:focus {
+  border-color: #2f5cff;
+  box-shadow: 0 0 0 3px rgba(47, 92, 255, 0.12);
+}
+
+/* BUTTON */
+.woocommerce-Button {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: none;
+  background: #2f5cff;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.woocommerce-Button:hover {
+  background: #2447d6;
+  transform: translateY(-1px);
+}
+
+/* LAYOUT FIX */
+.form-row {
+  margin: 0;
+}
+
+.form-row-first {
+  margin-bottom: 14px;
+}
+
+/* MOBILE */
+@media (max-width: 480px) {
+  .woocommerce-ResetPassword {
+    padding: 20px;
   }
 }
