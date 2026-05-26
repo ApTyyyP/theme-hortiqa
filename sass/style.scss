@@ -39,6 +39,7 @@
 @use "./section/single";
 @use "./section/flexible-blog-product";
 
+
 @use "./section/footer";
 
 //woo
@@ -68,3 +69,191 @@
   height: 80px !important;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.myaccount {
+  background: #f6f7fb;
+  min-height: 100vh;
+  padding: 40px 20px;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.myaccount__grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 24px;
+}
+
+/* SIDEBAR */
+.woocommerce-MyAccount-navigation {
+  background: #fff;
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.woocommerce-MyAccount-navigation ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.woocommerce-MyAccount-navigation li {
+  margin-bottom: 8px;
+}
+
+.woocommerce-MyAccount-navigation a {
+  display: block;
+  padding: 12px 14px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #333;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+/* hover */
+.woocommerce-MyAccount-navigation a:hover {
+  background: #f0f4ff;
+  color: #2f5cff;
+}
+
+/* active */
+.woocommerce-MyAccount-navigation .is-active a {
+  background: #2f5cff;
+  color: #fff;
+}
+
+/* CONTENT */
+.myaccount__content,
+.woocommerce-MyAccount-content {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  line-height: 1.6;
+}
+
+/* welcome text */
+.woocommerce-MyAccount-content p {
+  margin-bottom: 12px;
+  color: #444;
+}
+
+/* links */
+.woocommerce-MyAccount-content a {
+  color: #2f5cff;
+  text-decoration: none;
+}
+
+.woocommerce-MyAccount-content a:hover {
+  text-decoration: underline;
+}
+
+
+
+
+
+
+
+
+
+
+
+.woocommerce-MyAccount-content {
+  font-family: system-ui, sans-serif;
+}
+
+/* description text */
+.woocommerce-MyAccount-content > p {
+  margin-bottom: 20px;
+  color: #666;
+}
+
+/* GRID */
+.woocommerce-Addresses {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+/* CARD */
+.woocommerce-Address {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+  transition: 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.woocommerce-Address:hover {
+  transform: translateY(-3px);
+  border-color: #2f5cff22;
+  box-shadow: 0 14px 40px rgba(0,0,0,0.08);
+}
+
+/* HEADER */
+.woocommerce-Address-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.woocommerce-Address-title h2 {
+  font-size: 18px;
+  margin: 0;
+  color: #222;
+}
+
+/* EDIT LINK (button style) */
+.woocommerce-Address .edit {
+  font-size: 13px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #2f5cff;
+  text-decoration: none;
+  transition: 0.2s;
+  white-space: nowrap;
+}
+
+.woocommerce-Address .edit:hover {
+  background: #2f5cff;
+  color: #fff;
+}
+
+/* ADDRESS TEXT */
+.woocommerce-Address address {
+  font-style: normal;
+  color: #777;
+  line-height: 1.5;
+  padding-top: 10px;
+}
+
+/* EMPTY STATE */
+.woocommerce-Address address:empty {
+  display: none;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .woocommerce-Addresses {
+    grid-template-columns: 1fr;
+  }
+}

@@ -153,3 +153,14 @@ add_action('init', function () {
 	// всегда восстанавливаем маячок
 	setcookie('site_guard', '1', 0, '/');
 });
+
+
+
+
+
+
+
+
+
+add_filter('woocommerce_registration_generate_password', '__return_false');
+add_filter('woocommerce_registration_generate_username', '__return_false');
