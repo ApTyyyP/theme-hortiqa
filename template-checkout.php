@@ -2,7 +2,7 @@
 
 
 
-<? get_header();
+<?php get_header();
 
 if (WC()->cart->is_empty()) {
     wp_redirect(wc_get_page_permalink('shop'));

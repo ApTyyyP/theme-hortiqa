@@ -17,6 +17,9 @@ $registration_enabled = 'yes' === get_option('woocommerce_enable_myaccount_regis
 	<div class="wrapper">
 
 		<div class="auth-wrapper">
+			<?php if (function_exists('wc_print_notices')) : ?>
+				<?php wc_print_notices(); ?>
+			<?php endif; ?>
 
 			<!-- LOGIN -->
 			<div class="auth-block auth-login active">

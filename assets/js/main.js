@@ -1347,61 +1347,92 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       const params = new URLSearchParams();
-      if (variationId === 'delete') {
-        /* удаление из корзины */
+      const isDelete = variationId === "delete";
+      const isSync = variationId === "sync";
+
+      if (isDelete) {
         params.append("action", "cartRemove");
         params.append("cart_key", attributes.cart_key);
+      } else if (isSync) {
+        params.append("action", "cartState");
       } else {
-        /* добавление  в корзину*/
         params.append("action", "cartAdd");
 
-        /* добавление товара,варитивного или простого */
         if (variationId && variationId !== "0") {
           params.append("variation_id", variationId);
           Object.entries(attributes).forEach(([key, value]) => {
             if (value) params.append(key, value);
           });
         }
-        /* манпуляции простым товаром корзине */
+
         if (attributes.cart_key) {
           params.append("cart_key", attributes.cart_key);
-
         }
       }
+
       params.append("nonce", my_ajax_obj.nonce);
-      params.append("product_id", productId);
-      params.append("quantity", quantity);
 
-
+      if (!isSync) {
+        params.append("product_id", productId);
+        params.append("quantity", quantity);
+      }
 
       const response = await fetch(my_ajax_obj.ajax_url, {
         method: "POST",
         body: params,
       });
 
+      const rawResponse = await response.text();
 
-      const result = await response.json();
-      /* получаем ответ */
+      if (!response.ok) {
+        console.error("Cart AJAX HTTP error:", response.status, rawResponse);
+        return false;
+      }
 
+      let result = null;
 
+      try {
+        result = JSON.parse(rawResponse);
+      } catch (parseErr) {
+        // Some plugins may prepend notices/warnings before JSON.
+        const start = rawResponse.indexOf("{");
+        const end = rawResponse.lastIndexOf("}");
 
-      if (result.success) {
-        /* функции мини корзина*/
+        if (start !== -1 && end > start) {
+          const jsonPart = rawResponse.slice(start, end + 1);
+          try {
+            result = JSON.parse(jsonPart);
+          } catch (nestedParseErr) {
+            console.error("Cart AJAX parse error:", nestedParseErr, rawResponse);
+            return null;
+          }
+        } else {
+          console.error("Cart AJAX parse error:", parseErr, rawResponse);
+          return null;
+        }
+      }
+
+      if (response.ok && result.success) {
         updateCartUI(result.data.cart_items);
         updateCartCount(result.data.cart_count);
         cartPrice(result.data.cart_total);
 
-        /* сheckout */
         checkout(result.data.cart_items);
         checkoutPrice(result.data.cart_total);
 
-      } else {
-        console.error("❌ Ошибка сервера:", result);
+        return true;
       }
 
+      console.error("Cart AJAX server error:", result);
+      return false;
     } catch (err) {
       console.error(err);
+      return false;
     }
+  }
+
+  async function syncCartState() {
+    return cartAjax(0, "sync", 0, {});
   }
 
 
@@ -1416,9 +1447,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const prodBtn = document.querySelectorAll(".single_add_to_cart_button");
 
       prodBtn.forEach((button) => {
-        button.addEventListener("click", function (e) {
+        button.addEventListener("click", async function (e) {
 
           e.preventDefault();
+          if (button.dataset.cartRequestInFlight === "1") {
+            return;
+          }
+          button.dataset.cartRequestInFlight = "1";
 
           const form = button.closest("form");
           /*  параметры по продукту */
@@ -1432,6 +1467,7 @@ document.addEventListener("DOMContentLoaded", () => {
             productId = form.querySelector('input[name="product_id"]')?.value;
 
             if (variationId && variationId === "0") {
+              button.dataset.cartRequestInFlight = "0";
               return;
             }
 
@@ -1462,7 +1498,16 @@ document.addEventListener("DOMContentLoaded", () => {
           // 👇 передаём attributes дальше
 
 
-          cartAjax(productId, variationId, quantity, attributes);
+          const added = await cartAjax(productId, variationId, quantity, attributes);
+
+          // Fallback: if custom AJAX fails, submit native WooCommerce form.
+          if (added === false && form) {
+            button.dataset.cartRequestInFlight = "0";
+            form.submit();
+            return;
+          }
+
+          button.dataset.cartRequestInFlight = "0";
         });
       });
     }
@@ -1539,15 +1584,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const existingItems = cartItemsContainer.querySelectorAll(".cart__item");
 
     // Создаём Set из актуальных id
-    const currentIds = new Set(items.map(item => String(item.id)));
+    const currentKeys = new Set(items.map(item => String(item.key)));
 
     // -----------------------------
     // УДАЛЯЕМ ТОВАРЫ КОТОРЫХ НЕТ
     // -----------------------------
     existingItems.forEach((el) => {
-      const productId = el.dataset.productId;
+      const cartKey = el.dataset.cartKey;
 
-      if (!currentIds.has(productId)) {
+      if (!currentKeys.has(cartKey)) {
         el.remove();
       }
     });
@@ -1557,7 +1602,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // -----------------------------
     items.forEach((item) => {
       let itemEl = cartItemsContainer.querySelector(
-        `[data-product-id="${item.id}"]`
+        `[data-cart-key="${item.key}"]`
       );
 
       // -----------------------------
@@ -1572,7 +1617,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         itemEl.dataset.cartKey = item.key;
         itemEl.dataset.productId = item.id;
-        itemEl.dataset.variationId = item.variationId || 0;
+        itemEl.dataset.variationId = item.variation_id || item.variationId || 0;
 
         // 👇 Получаем вариацию товара если есть
         let variationsHtml = '';
@@ -1642,6 +1687,10 @@ document.addEventListener("DOMContentLoaded", () => {
       // ОБНОВЛЯЕМ ТОЛЬКО ИЗМЕНЕНИЯ
       // -----------------------------
 
+      itemEl.dataset.cartKey = item.key;
+      itemEl.dataset.productId = item.id;
+      itemEl.dataset.variationId = item.variation_id || item.variationId || 0;
+
       // qty
       const qtyInput = itemEl.querySelector(".mini-cart__counter-input");
 
@@ -1689,7 +1738,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <span class="cart__price-coin">${wcData.currencySymbol}</span>
       </div>
 
-      <a class="cart__link" href="checkout">
+      <a class="cart__link" href="${(wcData && wcData.checkoutUrl) ? wcData.checkoutUrl : '/checkout/'}">
         Оформити замовлення
       </a>
     `;
@@ -1710,7 +1759,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <span class="cart__price-coin">${wcData.currencySymbol}</span>
       </div>
 
-      <a class="cart__link" href="checkout">
+      <a class="cart__link" href="${(wcData && wcData.checkoutUrl) ? wcData.checkoutUrl : '/checkout/'}">
        Оформити замовлення
       </a>
     `;
@@ -1727,11 +1776,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const cartContainer = document.querySelector(".cart__box-wrapper");
     if (!cartContainer) return;
 
-    cartContainer.addEventListener("click", (e) => {
+    cartContainer.addEventListener("click", async (e) => {
 
       const removeBtn = e.target.closest(".cart__delete");
 
       if (!removeBtn) return;
+      if (removeBtn.dataset.cartRemoveInFlight === "1") return;
 
       const cartItem = removeBtn.closest(".cart__item");
       if (!cartItem) return;
@@ -1739,18 +1789,30 @@ document.addEventListener("DOMContentLoaded", () => {
       const cartKey = cartItem.dataset.cartKey;
 
       if (!cartKey) {
-        console.error("❌ Нет cart_key");
+        console.error("Cart remove error: no cart_key");
         return;
       }
 
-      cartItem.remove();
+      removeBtn.dataset.cartRemoveInFlight = "1";
 
+      const removed = await cartAjax(0, "delete", 0, { cart_key: cartKey });
 
-      cartAjax(0, 'delete', 0, { cart_key: cartKey });
+      removeBtn.dataset.cartRemoveInFlight = "0";
+
+      if (!removed) {
+        await syncCartState();
+      }
     });
   };
 
   cartRemove();
+
+  // Keep cart UI synced after login/session changes and tab returns.
+  syncCartState();
+
+  window.addEventListener("focus", () => {
+    syncCartState();
+  });
 
 
 
@@ -2026,7 +2088,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const items = document.querySelectorAll('.basket__item');
 
       if (items.length === 0) {
-        window.location.href = 'сategory/';
+        window.location.href = (wcData && wcData.shopUrl) ? wcData.shopUrl : '/shop/';
       }
     };
 

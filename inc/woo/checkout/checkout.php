@@ -1,53 +1,28 @@
 <?php
 
-
-
-
-/* Хук удаляет из формы импуты,  делать обезательные импуты или нет, для заполения и можно управлять порядком вывода импутов  */
-
 add_filter('woocommerce_checkout_fields', 'custom_remove_checkout_fields');
 
 function custom_remove_checkout_fields($fields)
 {
-    // Улаление из личных данных импуты
     unset($fields['billing']['billing_company']);
-
-    /* Это поле обезательное его нельзя удалять  наче будет ошибка
-      Пожалуйста, введите адрес для продолжения
-
-    /*unset($fields['billing']['billing_country']);*/
-
-
     unset($fields['billing']['billing_state']);
     unset($fields['billing']['billing_postcode']);
     unset($fields['billing']['billing_address_1']);
     unset($fields['billing']['billing_address_2']);
     unset($fields['billing']['billing_city']);
 
-    // PHONE обезательное к заполнению
     $fields['billing']['billing_phone']['required'] = true;
     $fields['billing']['billing_phone']['label'] = 'Телефон';
 
-
     return $fields;
 }
-
-
-
-
-
-
-/* хук для порядка вывода в форме блоков импуты , 1 личные данные 2 доставка 3 оплата*/
 
 remove_action(
     'woocommerce_checkout_billing',
     array(WC()->checkout(), 'checkout_form_billing')
 );
 
-
-
 add_action('woocommerce_checkout_billing', function () {
-
     $checkout = WC()->checkout();
     $fields = $checkout->get_checkout_fields();
 
@@ -55,12 +30,9 @@ add_action('woocommerce_checkout_billing', function () {
     echo '<h2 class="checkout__title title">Оформлення замовлення</h2>';
     echo '<ul class="checkout__items ">';
 
-
-    //  личные данные 
     foreach ($fields['billing'] as $key => $field) {
-
         echo '<li class="checkout__item">';
-        // добавляем свой класс к input
+
         $field['input_class'][] = 'checkout__input';
         $field['class'][] = 'checkout__box';
 
@@ -69,43 +41,14 @@ add_action('woocommerce_checkout_billing', function () {
             $field,
             $checkout->get_value($key)
         );
+
         echo '</li>';
     }
 
-
-
-    // ⚙️ ACCOUNT (если включено)
     if (!empty($fields['account'])) {
-        echo '<h3 class="title">Доствка</h3>';
+        echo '<h3 class="title">Доставка</h3>';
 
         foreach ($fields['account'] as $key => $field) {
-            echo '<li class="checkout__item">';
-            // добавляем свой класс к input
-            $field['input_class'][] = 'checkout__input';
-            $field['class'][] = 'checkout__box';
-
-
-            woocommerce_form_field(
-                $key,
-                $field,
-                $checkout->get_value($key)
-            );
-        }
-        echo '</li>';
-    }
-
-
-
-    /* --------------------не нужна доствка базовая вокомерса убрать значит -------------- */
-
-
-    /* Доствка  отключил стандартную потключил вокомерс */
-    /*     if (!empty($fields['shipping'])) {
-
-        echo '<h2 class="title">Доставка</h2>';
-
-        foreach ($fields['shipping'] as $key => $field) {
-
             echo '<li class="checkout__item">';
 
             $field['input_class'][] = 'checkout__input';
@@ -119,20 +62,14 @@ add_action('woocommerce_checkout_billing', function () {
 
             echo '</li>';
         }
-    } */
+    }
 
     echo '</ul>';
     echo '<h3 class="checkout__comment">Доставка нова пошта</h3>';
     echo '</div>';
 }, 10);
 
-
-
-
-
-/* хук Коментарь из формы ,  Если нужно его можно поместить выше в хук*/
 add_action('woocommerce_after_order_notes', function () {
-
     echo '<div class="after-np-comment">';
 
     $checkout = WC()->checkout();
@@ -150,42 +87,16 @@ add_action('woocommerce_after_order_notes', function () {
     echo '</div>';
 }, 20);
 
-
-
-/* убрать  Дополнительный адрис */
 add_filter('woocommerce_cart_needs_shipping_address', '__return_false');
-
-
-
-
-
-
-
-
-
-/* Блок опалата */
 
 remove_action('woocommerce_checkout_order_review', 'woocommerce_checkout_payment', 20);
 
 add_action('woocommerce_checkout_order_review', function () {
-
     echo '<h3 class="checkout__comment">Оберіть зручний для вас спосіб оплати</h3>';
-
     woocommerce_checkout_payment();
 }, 20);
 
-
-
-
-
-
-
-
-
-
-
 add_filter('woocommerce_checkout_fields', function ($fields) {
-
     if (!empty($fields['shipping'])) {
         foreach ($fields['shipping'] as $key => $field) {
             $fields['shipping'][$key]['required'] = false;
@@ -195,9 +106,154 @@ add_filter('woocommerce_checkout_fields', function ($fields) {
     return $fields;
 }, 9999);
 
+/**
+ * Keep WC Ukr Shipping shipping context mount point in custom checkout markup.
+ * Plugin mounts both #wcus-billing-fields and #wcus-shipping-fields via JS.
+ */
+add_action('woocommerce_checkout_shipping', function () {
+    echo '<div id="wcus-shipping-fields"></div>';
+}, 30);
 
-add_action('woocommerce_checkout_process', function () {
+/**
+ * Resolve fallback city ref for WC Ukr Shipping Nova Poshta requests.
+ *
+ * @return string
+ */
+function hortiqa_wcus_city_ref_fallback()
+{
+    $request_keys = array(
+        'wcus_np_billing_city',
+        'wcus_np_shipping_city',
+        'wcus_city_ref',
+        'city_ref',
+    );
 
-    // убираем стандартную проверку shipping адреса
-    remove_all_filters('woocommerce_after_checkout_validation');
-});
+    foreach ($request_keys as $key) {
+        if (empty($_REQUEST[$key])) {
+            continue;
+        }
+
+        $value = wp_unslash($_REQUEST[$key]);
+        if (is_string($value) && $value !== '') {
+            return sanitize_text_field($value);
+        }
+    }
+
+    if (function_exists('WC') && WC()->session) {
+        $session_keys = array('wcus_last_city_ref', 'wcus_city_ref');
+        foreach ($session_keys as $session_key) {
+            $session_value = WC()->session->get($session_key);
+            if (is_string($session_value) && $session_value !== '') {
+                return sanitize_text_field($session_value);
+            }
+        }
+    }
+
+    return '8d5a980d-391c-11dd-90d9-001a92567626';
+}
+
+/**
+ * WC Ukr Shipping checks city_ref before its own filters.
+ * Fill missing city_ref early for warehouses search request.
+ */
+add_action('init', function () {
+    if (!wp_doing_ajax()) {
+        return;
+    }
+
+    $action = isset($_REQUEST['action']) ? sanitize_key(wp_unslash($_REQUEST['action'])) : '';
+    if ($action !== 'wcus_search_warehouses') {
+        return;
+    }
+
+    if (!empty($_REQUEST['city_ref'])) {
+        return;
+    }
+
+    $fallback = hortiqa_wcus_city_ref_fallback();
+    if ($fallback === '') {
+        return;
+    }
+
+    $_REQUEST['city_ref'] = $fallback;
+    $_POST['city_ref'] = $fallback;
+}, 1);
+
+/**
+ * Fallback city ref for Nova Poshta pickup points search.
+ * Prevents empty "Nothing found" when checkout JS loses city_ref state.
+ */
+add_filter('wcus_pudo_points_request', function ($request, $carrier) {
+    if ($carrier !== 'nova_poshta' || !is_array($request)) {
+        return $request;
+    }
+
+    if (!empty($request['cityId'])) {
+        return $request;
+    }
+
+    $request['cityId'] = hortiqa_wcus_city_ref_fallback();
+
+    return $request;
+}, 10, 2);
+
+/**
+ * Frontend guard: ensure checkout state has city ref before WCUS app bootstrap.
+ */
+add_action('wp_enqueue_scripts', function () {
+    if (!function_exists('is_checkout') || !is_checkout()) {
+        return;
+    }
+
+    if (
+        !wp_script_is('wcus_checkout_js', 'registered')
+        && !wp_script_is('wcus_checkout_js', 'enqueued')
+    ) {
+        return;
+    }
+
+    $script = <<<'JS'
+(function () {
+  function applyCityFallback() {
+    if (!window.WCUS_APP_STATE || !window.WCUS_APP_STATE.checkout || !window.wc_ukr_shipping_globals) {
+      return;
+    }
+
+    var defaults = window.wc_ukr_shipping_globals.default_cities || [];
+    if (!Array.isArray(defaults) || defaults.length === 0 || !defaults[0] || !defaults[0].value) {
+      return;
+    }
+
+    var fallback = defaults[0];
+    var checkout = window.WCUS_APP_STATE.checkout;
+
+    if (!checkout.city || !checkout.city.value) {
+      checkout.city = {
+        value: fallback.value,
+        name: fallback.name || ""
+      };
+    }
+
+    var inputNames = ["wcus_np_billing_city", "wcus_np_shipping_city"];
+    inputNames.forEach(function (name) {
+      var input = document.querySelector('input[name="' + name + '"]');
+      if (input && !input.value) {
+        input.value = checkout.city.value;
+      }
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", applyCityFallback);
+  } else {
+    applyCityFallback();
+  }
+
+  if (window.jQuery) {
+    window.jQuery(document.body).on("updated_checkout", applyCityFallback);
+  }
+})();
+JS;
+
+    wp_add_inline_script('wcus_checkout_js', $script, 'before');
+}, 200);

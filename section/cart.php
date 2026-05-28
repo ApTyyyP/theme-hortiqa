@@ -12,6 +12,10 @@ function cart()
     }
 
     // Форсуємо оновлення кошика
+    if (function_exists('hortiqa_merge_guest_cart_into_logged_user_cart')) {
+        hortiqa_merge_guest_cart_into_logged_user_cart();
+    }
+
     WC()->cart->get_cart();
 
     $items = WC()->cart->get_cart();

@@ -67,7 +67,7 @@
 
 							<div class="header__content">
 
-								<a href="my-account/" class="header__account account header__box">
+								<a href="<?php echo esc_url(wc_get_page_permalink('myaccount')); ?>" class="header__account account header__box">
 									<svg class="user__svg">
 										<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/svg/login.svg#login"></use>
 									</svg>
